@@ -104,7 +104,7 @@ bool TextFilesManager::deleteFile(const char* name) {
 	}
 
 	File& file = getFileByIndex(index);
-	file = getFileByIndex(this->filesCnt);
+	file = getFileByIndex(this->filesCnt - 1);
 	this->filesCnt--;
 	return true;
 }
@@ -139,7 +139,7 @@ void TextFilesManager::printFile(const char* name, const char role) {
 
 	File& file = getFileByIndex(index);
 	if (!canRoleAcsessReadFile(file, role)) {
-		cout << "Error! You do not have the rights to reed!";
+		cout << "Error! You do not have the rights to reàd!";
 		printNewline();
 		return;
 	}
@@ -169,7 +169,7 @@ void TextFilesManager::print() {
 }
 
 void TextFilesManager::sort(const SortOptions& option) {
-	quicksort(0, getFilesCnt()-1, option);
+	quicksort(0, getFilesCnt() - 1, option);
 }
 
 void TextFilesManager::quicksort(int left, int right, int option) {

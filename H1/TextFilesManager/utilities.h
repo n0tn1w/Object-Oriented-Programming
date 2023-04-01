@@ -9,7 +9,7 @@ using namespace std;
 
 void printNewline();
 
-Date& createDate(size_t, size_t, size_t, size_t, size_t, size_t);
+Date createDate(size_t, size_t, size_t, size_t, size_t, size_t);
 
 bool canRoleAcsessWriteFile(const File&, const char);
 bool canRoleAcsessReadFile(const File&, const char);

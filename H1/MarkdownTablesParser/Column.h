@@ -1,6 +1,8 @@
 #pragma once
 #include "constants.h"
 #include "Field.h"
+#include "stringHelper.h"
+#include <iostream>
 
 class Column {
 
@@ -21,22 +23,19 @@ public:
 	Field& getName();
 	void setName(Field&);
 
-	void addField(Field&);
-
-	void setFieldsNumber(const size_t);
+	
 	size_t getFieldsNumber() const;
+	void setFieldsNumber(const size_t);
 
-	void setOrder(int);
 	int getOrder() const;
+	void setOrder(int);
 
+	Field& getFieldRow(const size_t);
+
+	void addField(Field&);
 	bool changeField(const int, Field&);
-	Field* getFieldRow(const size_t); 
-
 	bool addRow(size_t, Field&);
-
 	bool replaceField(Field&, Field&);
-
-	void print();
 
 	size_t getLongestFieldLength();
 

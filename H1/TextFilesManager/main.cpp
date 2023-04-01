@@ -1,8 +1,14 @@
 #include <iostream>
 #include "TextFilesManager.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+typedef int pain;
+
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	TextFilesManager fs(5);
 	fs.addFile("test15.txt", 14, 0, 0, 20, 3, 2023, "rwxr--r--");
 	fs.addFile("test.txt", 14, 0, 2, 20, 3, 2023, "rwxr--r--");
@@ -21,7 +27,9 @@ int main()
 	fs.editFile("test.txt", "Hello", 14, 15, 0, 20, 3, 2023, 'u'); 	// Hello
 
 	fs.addFile("attest.txt", 14, 30, 0, 20, 3, 2023, "rwxr--r--");
-	fs.deleteFile("attest.txt");
+	fs.deleteFile("test.txt");
+	
+	fs.deleteFile("test34.txt");
 
 
 	fs.addFile("attest.txt", 14, 35, 0, 20, 3, 2027, "rwxr--r--");
@@ -56,5 +64,7 @@ int main()
 
 	fs.sort(SortOptions::size);
 	fs.print();
+
+	_CrtDumpMemoryLeaks();
 }
 

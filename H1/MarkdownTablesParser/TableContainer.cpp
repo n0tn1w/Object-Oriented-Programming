@@ -1,8 +1,4 @@
 #include "TableContainer.h"
-#include "helper.h"
-#include "stringHelper.h"
-#include <iostream>
-using namespace std;
 
 void TableContainer::addColumn(const Column& column) {
 	this->columns[colNumber] = column;
@@ -17,8 +13,8 @@ size_t TableContainer::getColNumber() const {
 	return this->colNumber;
 }
 
-Column* TableContainer::getColumns(size_t i) {
-	return &this->columns[i];
+Column& TableContainer::getColumn(size_t i) {
+	return this->columns[i];
 }
 
 bool TableContainer::changeColumnName(Field& from, Field& to) {
@@ -28,9 +24,7 @@ bool TableContainer::changeColumnName(Field& from, Field& to) {
 		return false;
 	}
 
-	Column* clsF;
-	clsF = getColumns(indexFrom);
-	clsF->setName(to);
+	getColumn(indexFrom).setName(to);
 
 	return true;
 }
@@ -40,9 +34,9 @@ bool TableContainer::changeRow(int row, Field& colName, Field& to) {
 	if (index == -1) {
 		return false;
 	}
-	Column* cls = getColumns(findColIndexByName(colName));
+	Column& cls = getColumn(findColIndexByName(colName));
 
-	if(!cls->changeField(row - 1,to)) {
+	if(!cls.changeField(row - 1,to)) {
 		return false;
 	}
 	return true;
@@ -50,12 +44,10 @@ bool TableContainer::changeRow(int row, Field& colName, Field& to) {
 
 
 size_t TableContainer::findColIndexByName(Field& name) {
-	Column* cls;
 	for(size_t i =0; i < getColNumber(); i++) {
-		cls = getColumns(i);
-		if(strCmp(cls->getName().value, name.value)) {
+		if(strCmp(getColumn(i).getName().value, name.value)) {
 		
-			cls->setName(name);
+			getColumn(i).setName(name);
 			return i;
 		} 
 	}
@@ -65,8 +57,8 @@ size_t TableContainer::findColIndexByName(Field& name) {
 bool TableContainer::addRow(Field* fields, size_t cmdCnt) {
 
 	for(size_t i = 0; i< getColNumber(); i++) {
-		Column*  cls = getColumns(i);
-		if(!cls->addRow(cls->getFieldsNumber(), fields[i])) {
+		Column& cls = getColumn(i);
+		if(!cls.addRow(cls.getFieldsNumber(), fields[i])) {
 			return false;
 		}
 	}
@@ -79,8 +71,8 @@ bool TableContainer::changeOneRow(Field& colName, Field& from, Field& to) {
 		return false;
 	}
 
-	Column* cls = getColumns(index);
-	if (cls->replaceField(from, to)) {
+	Column& cls = getColumn(index);
+	if (cls.replaceField(from, to)) {
 		return true;
 	}
 	return false;
@@ -95,20 +87,20 @@ bool TableContainer::selectWhere(Field& colName, Field& fieldName) {
 		return false;
 	}
 
-	print2(fieldName, index);
+	printSelect(fieldName, index);
 }
 
 bool TableContainer::checkIfFieldExistsInACol(Field& fieldName, size_t index) {
-	Column* cls = getColumns(index);
-	for (size_t k = 0; k < cls->getFieldsNumber(); k++) {
-		if (strCmp(cls->getFieldRow(k)->value, fieldName.value)) {
+	Column& cls = getColumn(index);
+	for (size_t k = 0; k < cls.getFieldsNumber(); k++) {
+		if (strCmp(cls.getFieldRow(k).value, fieldName.value)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-void TableContainer::print2(Field& fieldName, size_t index) {
+void TableContainer::printSelect(Field& fieldName, size_t index) {
 
 	size_t lengthField = getLongestFieldLength() + 2;
 	if (lengthField % 2 == 1) {
@@ -117,41 +109,22 @@ void TableContainer::print2(Field& fieldName, size_t index) {
 
 	size_t rowCnt = 0;
 	if (getColNumber() > 0) {
-		Column* colums = getColumns(0);
-		rowCnt = columns[0].getFieldsNumber();
+		rowCnt = getColumn(0).getFieldsNumber();
 	}
 	else {
 		return;
 	}
 
-	//print header
-	printTableCharacter();
-	for (size_t i = 0; i < getColNumber(); i++) {
-		Column* cls = getColumns(i);
-		pritnFieldWithLength(&cls->getName(), lengthField, cls->getOrder());
-		printTableCharacter();
-	}
-	printNewline();
-
-	//print --- line
-	printTableCharacter();
-	for (size_t i = 0; i < getColNumber(); i++) {
-		Column* cls = getColumns(i);
-		printOrder(lengthField, cls->getOrder());
-		printTableCharacter();
-	}
-	printNewline();
+	printTableHeader(lengthField);
 
 	//print body
 	for (size_t k = 0; k < rowCnt; k++) {
-		printTableCharacter();
-		Column* cls = getColumns(index);
-		if (strCmp(cls->getFieldRow(k)->value, fieldName.value)) {
-
+		Column& cls = getColumn(index);
+		if (strCmp(cls.getFieldRow(k).value, fieldName.value)) {
+			printTableCharacter();
 			for (size_t i = 0; i < getColNumber(); i++) {
-				Column* cls = getColumns(i);
-					pritnFieldWithLength(cls->getFieldRow(k), lengthField, cls->getOrder());
-					printTableCharacter();
+				pritnFieldWithLength(getColumn(i).getFieldRow(k), lengthField, getColumn(i).getOrder());
+				printTableCharacter();
 			}
 			printNewline();
 		}
@@ -161,45 +134,26 @@ void TableContainer::print2(Field& fieldName, size_t index) {
 
 
 void TableContainer::print() {
-
 	size_t lengthField = getLongestFieldLength() + 2;
 	if (lengthField % 2 == 1) {
 		lengthField++;
 	}
-	
+
 	size_t rowCnt = 0;
 	if (getColNumber() > 0) {
-		Column* colums = getColumns(0);
+		Column& colums = getColumn(0);
 		rowCnt = columns[0].getFieldsNumber();
 	}
 	else {
 		return;
 	}
-	
-	//print header
-	printTableCharacter();
-	for (size_t i = 0; i < getColNumber(); i++) {
-		Column* cls = getColumns(i);
-		pritnFieldWithLength(&cls->getName(), lengthField, cls->getOrder());
-		printTableCharacter();
-	}
-	printNewline();
-
-	//print --- line
-	printTableCharacter();
-	for (size_t i = 0; i < getColNumber(); i++) {
-		Column* cls = getColumns(i);
-		printOrder(lengthField, cls->getOrder());
-		printTableCharacter();
-	}
-	printNewline();
-
+	printTableHeader(lengthField);
 	//print body
 	for (size_t k = 0; k < rowCnt; k++) {
 		printTableCharacter();
 		for (size_t i = 0; i < getColNumber(); i++) {
-			Column* cls = getColumns(i);
-			pritnFieldWithLength(cls->getFieldRow(k), lengthField, cls->getOrder());
+			Column& cls = getColumn(i);
+			pritnFieldWithLength(cls.getFieldRow(k), lengthField, cls.getOrder());
 			printTableCharacter();
 		}
 		printNewline();
@@ -207,48 +161,37 @@ void TableContainer::print() {
 
 }
 
-void TableContainer::printOrder(size_t lengthField, int order) {
-	cout << ' ';
-	if (order == 0) {
-		for (size_t k = 0; k < lengthField - 1; k++) {
-			cout << '-';
-		}
+void TableContainer::printTableHeader(size_t lengthField) {
+	//print header
+	printTableCharacter();
+	for (size_t i = 0; i < getColNumber(); i++) {
+		pritnFieldWithLength(getColumn(i).getName(), lengthField, getColumn(i).getOrder());
+		printTableCharacter();
 	}
-	else if (order == 1) {
-		cout << ':';
-		for (size_t k = 0; k < lengthField - 2; k++) {
-			cout << '-';
-		}
+	printNewline();
+
+	//print --- line
+	printTableCharacter();
+	for (size_t i = 0; i < getColNumber(); i++) {
+		printOrder(lengthField, getColumn(i).getOrder());
+		printTableCharacter();
 	}
-	else if (order == 2) {
-		for (size_t k = 0; k < lengthField - 2; k++) {
-			cout << '-';
-		}
-		cout << ':';
-	}
-	else if (order == 3) {
-		cout << ':';
-		for (size_t k = 0; k < lengthField - 4; k++) {
-			cout << '-';
-		}
-		cout << ':';
-	}
-	cout << ' ';
+	printNewline();
 }
 
-void TableContainer::pritnFieldWithLength(Field* field, const size_t& totalLen, int order) {
+void TableContainer::pritnFieldWithLength(Field& field, const size_t& totalLen, int order) {
 	if (order == 0 || order == 1) {
-		cout << " " << field->value;
-		for (size_t i = 0; i < totalLen - strLength(field->value); i++) {
+		cout << " " << field.value;
+		for (size_t i = 0; i < totalLen - strLength(field.value); i++) {
 			cout << " ";
 		}
 	}
 	else if (order == 3) {
-		size_t padding = totalLen - strLength(field->value);
+		size_t padding = totalLen - strLength(field.value);
 		for (size_t i = 0; i < padding/2; i++) {
 			cout << " ";
 		}
-		cout << field->value;
+		cout << field.value;
 		int value = padding % 2 == 0 ? padding / 2 : (padding / 2) + 1;
 		for (size_t i = 0; i < value; i++) {
 			cout << " ";
@@ -256,18 +199,18 @@ void TableContainer::pritnFieldWithLength(Field* field, const size_t& totalLen, 
 
 	}
 	else if (order == 2) {
-		for (size_t i = 0; i < totalLen - strLength(field->value); i++) {
+		for (size_t i = 0; i < totalLen - strLength(field.value); i++) {
 			cout << " ";
 		}
-		cout << field->value << " ";
+		cout << field.value << " ";
 	}
 }
 
 size_t TableContainer::getLongestFieldLength() {
 	size_t len = 0;
 	for (size_t i = 0; i < getColNumber(); i++) {
-		Column* cls = getColumns(i);
-		size_t crr = cls->getLongestFieldLength();
+		Column& cls = getColumn(i);
+		size_t crr = cls.getLongestFieldLength();
 		if (crr > len) {
 			len = crr;
 		}

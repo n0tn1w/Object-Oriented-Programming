@@ -1,11 +1,4 @@
-#include <iostream>
 #include "engine.h"
-#include "helper.h"
-#include "constants.h"
-#include "TableContainer.h"
-#include "stringHelper.h"
-
-using namespace std;
 
 void mainMenu(TableContainer &tableContainer) {
 	
@@ -81,6 +74,18 @@ void mainMenu(TableContainer &tableContainer) {
 				if (!tableContainer.selectWhere(columnName, fieldName)) {
 					cout << "Invalid field/s!";
 					printNewline();
+				}
+			}
+			else if (cmdCnt = 2 && strCmp(cmds[0], SAVE_CMD)) {
+				if (!saveFile(cmds[1], tableContainer)) {
+					cout << "File failed to save!";
+					printNewline();
+				}
+				else {
+					cout << "File successfully saved!";
+					printNewline();
+					freeCommands(cmds, cmdCnt);
+					return;
 				}
 			}
 			else {

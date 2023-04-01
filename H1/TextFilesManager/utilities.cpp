@@ -5,7 +5,7 @@ void printNewline() {
 }
 
 
-Date& createDate(size_t h, size_t m, size_t s, size_t d, size_t mn, size_t y) {
+Date createDate(size_t h, size_t m, size_t s, size_t d, size_t mn, size_t y) {
 	Date date{};
 
 	date.hours = h;

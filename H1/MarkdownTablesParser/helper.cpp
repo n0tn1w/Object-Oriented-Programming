@@ -1,11 +1,4 @@
 #include "helper.h"
-#include "TableContainer.h"
-#include "constants.h"
-#include "stringHelper.h"
-#include <iostream>
-#include <fstream>
-
-using namespace std;
 
 void printInputCharacter() {
 	cout << '>';
@@ -38,69 +31,6 @@ size_t extractColumnData(const char* row, char** currentRowValues) {
 	}
 
 	return wordsCnt;
-}
-
-bool readFile(const char* fileName, TableContainer& table) {
-	ifstream file(fileName);
-
-	if (!file.is_open()) {
-		return false;
-	}
-
-	char fileBuffer[FIELDS_MAX_COUNT + 2][TABLE_ROW_LENGTH];
-	//For the top 2 rows
-	int len = 0;
-
-	for (; !file.eof(); len++) {
-		file.getline(fileBuffer[len], TABLE_ROW_LENGTH);
-	}
-
-	file.close();
-
-	table.setColNumber(0);
-
-	for (size_t i = 0; i < len; i++) {
-		char** currentRowValues = new char*[COLUMN_MAX_COUNT];
-		size_t wordsCnt = extractColumnData(fileBuffer[i], currentRowValues);
-
-		if (i == 0) {
-			//header
-			for (size_t k = 0; k < wordsCnt; k++) {
-				Column column;
-				Field columnTitle;
-				strcopy(columnTitle.value, currentRowValues[k]);
-
-				column.setName(columnTitle);
-				column.setFieldsNumber(0);
-
-				table.addColumn(column);
-			}
-
-		} else if (i == 1) {
-			for (size_t k = 0; k < wordsCnt; k++) {
-				int order = getOrder(currentRowValues[k]);
-
-				Column* cls = table.getColumns(k);
-				cls->setOrder(order);
-			}
-		} else {
-			//table data
-			for (size_t k = 0; k < wordsCnt; k++) {
-				Field tableField;
-				strcopy(tableField.value, currentRowValues[k]);
-
-				Column* cls = table.getColumns(k);
-				cls->addField(tableField);
-			}
-		}
-
-		for (int i = 0; i < wordsCnt; i++) {
-			delete[] currentRowValues[i];
-		}
-		delete[] currentRowValues;
-
-	}
-	return true;
 }
 
 size_t readCommand(char** cmds) {
@@ -155,4 +85,62 @@ int getOrder(char* str) {
 	else {
 		return 2;
 	}
+}
+
+void printOrderFile(ofstream& file ,size_t lengthField, int order) {
+	file << ' ';
+	if (order == 0) {
+		for (size_t k = 0; k < lengthField - 1; k++) {
+			file << '-';
+		}
+	}
+	else if (order == 1) {
+		file << ':';
+		for (size_t k = 0; k < lengthField - 2; k++) {
+			file << '-';
+		}
+	}
+	else if (order == 2) {
+		for (size_t k = 0; k < lengthField - 2; k++) {
+			file << '-';
+		}
+		file << ':';
+	}
+	else if (order == 3) {
+		file << ':';
+		for (size_t k = 0; k < lengthField - 4; k++) {
+			file << '-';
+		}
+		file << ':';
+	}
+	file << ' ';
+}
+
+void printOrder(size_t lengthField, int order) {
+	cout  << ' ';
+	if (order == 0) {
+		for (size_t k = 0; k < lengthField - 1; k++) {
+			cout << '-';
+		}
+	}
+	else if (order == 1) {
+		cout << ':';
+		for (size_t k = 0; k < lengthField - 2; k++) {
+			cout << '-';
+		}
+	}
+	else if (order == 2) {
+		for (size_t k = 0; k < lengthField - 2; k++) {
+			cout << '-';
+		}
+		cout << ':';
+	}
+	else if (order == 3) {
+		cout << ':';
+		for (size_t k = 0; k < lengthField - 4; k++) {
+			cout << '-';
+		}
+		cout << ':';
+	}
+	cout << ' ';
 }
