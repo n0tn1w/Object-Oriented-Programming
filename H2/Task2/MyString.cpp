@@ -1,4 +1,5 @@
 #include "MyString.h"
+#pragma warning(disable:4996)
 
 MyString::MyString(size_t capacity)
 {

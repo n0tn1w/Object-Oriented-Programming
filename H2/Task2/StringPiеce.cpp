@@ -1,6 +1,6 @@
 #include "StringPiåce.h"
 
-StringPiece::StringPiece(): StringPiece("") {}
+StringPiece::StringPiece() : StringPiece("") {}
 
 StringPiece::StringPiece(const char* str) {
 
@@ -8,52 +8,169 @@ StringPiece::StringPiece(const char* str) {
 }
 
 void StringPiece::setPiece(const char* str) {
-	if (strLenght(str) > 16) {
-		return;
+	size_t strSize = strLength(str);
+
+	if (strSize > STR_SIZE) {
+		throw length_error("Str size too big!");
 	}
 
-	strCopy(this->str, str);
+
+	// 1 and not zero because of "" has \0 only
+	if (strSize == 1) {
+		nullify();
+	}
+	else {
+		strCopy(this->str, str);
+		this->size = strSize;
+		this->start = 0;
+		this->end = strSize - 1;
+	}
 }
 
 const char* StringPiece::getPiece() const {
-	return this->str;
+
+	char* res = new char[this->size + 1];
+
+	for (size_t i = 0; i < this->size; i++) {
+		size_t index = (this->start + i) % STR_SIZE;
+		res[i] = this->str[index];
+	}
+	res[this->size] = '\0';
+
+	return res;
 }
 
 char& StringPiece::operator[](size_t index) {
-	return this->str[index];
+	checkIfIndexIsValid(index);
+	size_t atIndex = (index + this->start) % STR_SIZE;
+	return this->str[atIndex];
 }
 
 char StringPiece::operator[] (size_t index) const {
-	return this->str[index];
+	checkIfIndexIsValid(index);
+	size_t atIndex = (index + this->start) % STR_SIZE;
+	return this->str[atIndex];
 }
 
-bool StringPiece::remove(int type, size_t index) {
-	//type: 1 - from the front, 2 - form the back
-	if (type != 1 || type != 2) {
-		return false;
+void StringPiece::remove(const Position& position, size_t k) {
+
+	//Validations for k
+	if (k > size || k < 0) {
+		throw logic_error("K value too big!");
 	}
 
-	//Validations
-	if (strLenght(str) < index) {
-		return false;
+	//Set start or end (% is done in case of overflow)
+	if (position == Position::begin) {
+		this->start = (this->start + k) % STR_SIZE;
+	}
+	else if (position == Position::end) {
+		this->end = (this->end + STR_SIZE - k) % STR_SIZE;
+	}
+	else {
+		throw invalid_argument("Invalid position!");
 	}
 
-	//Remove
+	if (this->start > this->end) {
+		//in case k == this->size
+		nullify();
+	}
+	else {
+		this->size -= k;
+	}
+
 }
 
 void StringPiece::changeByIndex(const char ch, size_t index) {
-	//Validations
-	this->str[index] = ch;
+	checkIfIndexIsValid(index);
+	this->str[this->start + index] = ch;
 }
 
 const size_t StringPiece::getSize() const {
-	return strLenght(str);
+	return this->size;
 }
 
-ostream operator<<(ostream& out, const StringPiece& from) {
+StringPiece& StringPiece::operator<<(const char* str) {
+	size_t strSize = strLength(str);
+	
+	//Validate if the new string can fit inside
+	if ( ( strSize + this->size ) > STR_SIZE) {
+		throw length_error("Str size too big!");
+	}
+	
+	//Append to the end
+	for (size_t i = 0; i < strSize; i++) {
+		this->end = (this->end + 1) % STR_SIZE;
+		this->str[this->end] = str[i];
+	}
+	this->size += strSize;
 
+	return *this;
 }
 
-istream operator>>(istream& in, StringPiece& to) {
+StringPiece& StringPiece::operator<<(int num) {
+	//Use already existing operator
+	//cout << "Num: " << convertIntToStr(num) << endl;
+	return operator<<(convertIntToStr(num));
+}
 
+StringPiece& operator>>(const char* str, StringPiece& other)
+{
+	size_t strSize = strLength(str);
+
+	//Validate if the new string can fit inside
+	if ((strSize + other.size) > STR_SIZE) {
+		throw length_error("Str size too big!");
+	}
+
+	//Append to the end
+	for (size_t i = 0; i < strSize; i++) {
+		size_t index = (other.start + STR_SIZE - strSize + i) % STR_SIZE;
+		other.str[index] = str[i];
+	}
+
+	other.size += strSize;
+	other.start = (other.start + STR_SIZE - strSize) % STR_SIZE;
+
+	return other;
+}
+
+StringPiece& operator>>(int num, StringPiece& other)
+{
+	return convertIntToStr(num) >> other;
+}
+
+//StringPiece& StringPiece::operator>>(const char* str) {
+//	size_t strSize = strLength(str);
+//
+//	//Validate if the new string can fit inside
+//	if ((strSize + this->size) > STR_SIZE) {
+//		throw length_error("Str size too big!");
+//	}
+//
+//	//Append to the end
+//	for (size_t i = 0; i < strSize; i++) {
+//		size_t index = (this->start + STR_SIZE - strSize + i) % STR_SIZE;
+//		this->str[index] = str[i];
+//	}
+//
+//	this->size += strSize;
+//	this->start = (this->start + STR_SIZE - strSize) % STR_SIZE;
+//	return *this;
+//}
+//
+//StringPiece& StringPiece::operator>>(int num) {
+//	//Use already existing operator
+//	return operator>>(convertIntToStr(num));
+//}
+
+void StringPiece::checkIfIndexIsValid(size_t index) const {
+	if (index + 1 > this->size || index < 0) {
+		throw out_of_range("Index of range!");
+	}
+}
+
+void StringPiece::nullify() {
+	this->size = 0;
+	this->start = 0;
+	this->end = 0;
 }
