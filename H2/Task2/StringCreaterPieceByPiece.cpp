@@ -27,6 +27,28 @@ StringCreaterPieceByPiece& StringCreaterPieceByPiece::operator=(const StringCrea
 
 	return *this;
 }
+
+StringCreaterPieceByPiece::StringCreaterPieceByPiece(StringCreaterPieceByPiece&& other) {
+	pieces = other.pieces;
+	other.pieces = nullptr;
+	count = other.count;
+	capacity = other.capacity;
+
+}
+
+StringCreaterPieceByPiece& StringCreaterPieceByPiece::operator=(StringCreaterPieceByPiece&& other) {
+	if (this != &other)
+	{
+		free();
+		pieces = other.pieces;
+		other.pieces = nullptr;
+		count = other.count;
+		capacity = other.capacity;
+	}
+	return *this;
+}
+
+
 StringCreaterPieceByPiece::~StringCreaterPieceByPiece() {
 
 	free();
@@ -72,6 +94,7 @@ void StringCreaterPieceByPiece::resize(size_t newCapacity) {
 }
 
 void StringCreaterPieceByPiece::addPiece() {
+	//Init an empty piece
 	addPiece("");
 }
 
@@ -88,7 +111,7 @@ void StringCreaterPieceByPiece::addPiece(const char* str) {
 
 void StringCreaterPieceByPiece::addPiece(const char* str, size_t index) {
 
-	//Validate if piece exists
+	//Remove current piece in this place 
 	remove(index);
 
 	//Replace pointer
@@ -99,6 +122,7 @@ void StringCreaterPieceByPiece::remove(size_t index) {
 	checkIfIndexIsValid(index);
 
 	delete this->pieces[index];
+	//Set the index to nullptr and when you need to add string to this index you need addPiece(str, index)
 	this->pieces[index] = nullptr;
 
 }
@@ -133,13 +157,18 @@ MyString StringCreaterPieceByPiece::getString() const {
 
 	for (size_t i = 0; i < this->count; i++) {
 		if (this->count > 1 && i == this->count - 2) {
-			if (this->pieces[i] == nullptr) {
-				str += "           ";
-				continue;
+			//If the piece is nullptr or empty should add \s{20}
+			if (this->pieces[i] == nullptr || this->pieces[i]->getSize() == 0) {
+				str += "                      ";
 			}
+			else {
+				str += MyString(this->pieces[i]->getPiece());
+			}
+			continue;
 		}
-
-		str += MyString(this->pieces[i]->getPiece());
+		if (this->pieces[i] != nullptr) {
+			str += MyString(this->pieces[i]->getPiece());
+		}
 	}
 
 	return str;
@@ -151,5 +180,14 @@ const StringPiece& StringCreaterPieceByPiece::operator[](size_t index) const {
 }
 StringPiece& StringCreaterPieceByPiece::operator[](size_t index) {
 	checkIfIndexIsValid(index);
+
+	//Replace the empty pointer with a piece
+	if (this->pieces[index] == nullptr) {
+		//It could return a nullptr but in my implementation i choose not to
+		//addPiece("", index);
+		this->pieces[index] = new StringPiece("");
+	
+	}
+
 	return *this->pieces[index];
 }

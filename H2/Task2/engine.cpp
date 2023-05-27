@@ -114,34 +114,66 @@ void run() {
     //p3.operator<<(103);
     //cout << p3.getPiece() << endl;
 
-    StringCreaterPieceByPiece sc(3);
+   /* StringCreaterPieceByPiece sc(3);
 
     sc.addPiece("test");
-    /*sc.addPiece("  ac");*/
     sc.addPiece();
     sc.addPiece("football");
-
-   /* StringPiece p2;
-    p2.setPiece("abbcccdddd");
-    p2 << "a";
-    p2 << "bb";
-    cout << p2.getPiece();*/
+    sc.addPiece();
+    sc.addPiece("football");
 
     sc[1] << " friends ";
     " Hello " >> sc[1];
     10 >> sc[2];
 
-
-    //cout << sc[0].getPiece() << sc[1].getPiece() << sc[2].getPiece();
-
-    MyString result1 = sc.getString(); // “test Hello friends 10football”
+    MyString result1 = sc.getString();
     cout << result1 << endl;
 
     sc.swap(1, 2);
-    MyString result2 = sc.getString(); // “test10football Hello friends”
+    MyString result2 = sc.getString();
     cout << result2 << endl;
 
     sc.remove(1);
-    MyString result3 = sc.getString(); // “test10                     Hello friends”
+    sc.remove(0);
+    sc.remove(2);
+    sc.remove(3);
+    MyString result3 = sc.getString();
     cout << result3 << endl;
+
+    sc.remove(4);
+    MyString result43 = sc.getString();
+    cout << result43 << endl;
+
+    sc.addPiece("", 4);
+    sc.addPiece("", 0);
+    sc[4] << "bb";
+    sc[4] << "@@";
+    sc[4] << 10;
+    "!!" >> sc[4];
+    11 >> sc[4];
+    10 >> sc[0];
+    sc[1] << "AWW";
+    sc[2] << " ** " ;
+
+    MyString result5 = sc.getString();
+    cout << result5 << endl;
+
+    sc[3] << "[]";
+
+    sc.swap(0, 4);
+    MyString result6 = sc.getString();
+    cout << result6 << endl;
+    cin >> sc[3];
+
+    MyString result7 = sc.getString();
+    cout << result7 << endl;*/
+
+    StringCreaterPieceByPiece sc(3);
+    sc.addPiece();
+    sc.addPiece("");
+    sc.addPiece();
+    cout << sc.getLen();
+    StringPiece s;
+    s << "abcdabcdabcdabc";
+    cout << s.getPiece();
 }

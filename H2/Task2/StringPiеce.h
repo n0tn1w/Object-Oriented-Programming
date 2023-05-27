@@ -16,7 +16,6 @@ class StringPiece {
 
 public:
 
-	//CANNOT SUBTRACT FROM SIZE_T
 	StringPiece();
 	StringPiece(const char*);
 
@@ -36,9 +35,8 @@ public:
 
 	friend StringPiece& operator>>(const char*, StringPiece&);
 	friend StringPiece& operator>>(int, StringPiece&);
+	friend StringPiece& operator>>(istream&, StringPiece&);
 
-	//StringPiece& operator>>(const char*);
-	//StringPiece& operator>>(int);
 
 private:
 	void checkIfIndexIsValid(size_t) const;
@@ -46,4 +44,5 @@ private:
 };
 
 StringPiece& operator>>(const char*, StringPiece&);
-StringPiece& operator>>(int, StringPiece&);
+StringPiece& operator>>(int, StringPiece&); 
+StringPiece& operator>>(istream&, StringPiece&);

@@ -17,6 +17,8 @@ public:
 	StringCreaterPieceByPiece(size_t);
 	StringCreaterPieceByPiece(const StringCreaterPieceByPiece&);
 	StringCreaterPieceByPiece& operator=(const StringCreaterPieceByPiece&);
+	StringCreaterPieceByPiece(StringCreaterPieceByPiece&&);
+	StringCreaterPieceByPiece& operator=(StringCreaterPieceByPiece&&);
 	~StringCreaterPieceByPiece();
 
 	void addPiece();

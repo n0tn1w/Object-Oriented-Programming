@@ -10,7 +10,8 @@ StringPiece::StringPiece(const char* str) {
 void StringPiece::setPiece(const char* str) {
 	size_t strSize = strLength(str);
 
-	if (strSize > STR_SIZE) {
+	//Str abcdabcdabcdabcd\0
+	if (strSize >= STR_SIZE) {
 		throw length_error("Str size too big!");
 	}
 
@@ -93,7 +94,7 @@ StringPiece& StringPiece::operator<<(const char* str) {
 	size_t strSize = strLength(str);
 	
 	//Validate if the new string can fit inside
-	if ( ( strSize + this->size ) > STR_SIZE) {
+	if ( ( strSize + this->size ) >= STR_SIZE) {
 		throw length_error("Str size too big!");
 	}
 	
@@ -109,7 +110,6 @@ StringPiece& StringPiece::operator<<(const char* str) {
 
 StringPiece& StringPiece::operator<<(int num) {
 	//Use already existing operator
-	//cout << "Num: " << convertIntToStr(num) << endl;
 	return operator<<(convertIntToStr(num));
 }
 
@@ -118,7 +118,7 @@ StringPiece& operator>>(const char* str, StringPiece& other)
 	size_t strSize = strLength(str);
 
 	//Validate if the new string can fit inside
-	if ((strSize + other.size) > STR_SIZE) {
+	if ((strSize + other.size) >= STR_SIZE) {
 		throw length_error("Str size too big!");
 	}
 
@@ -139,29 +139,14 @@ StringPiece& operator>>(int num, StringPiece& other)
 	return convertIntToStr(num) >> other;
 }
 
-//StringPiece& StringPiece::operator>>(const char* str) {
-//	size_t strSize = strLength(str);
-//
-//	//Validate if the new string can fit inside
-//	if ((strSize + this->size) > STR_SIZE) {
-//		throw length_error("Str size too big!");
-//	}
-//
-//	//Append to the end
-//	for (size_t i = 0; i < strSize; i++) {
-//		size_t index = (this->start + STR_SIZE - strSize + i) % STR_SIZE;
-//		this->str[index] = str[i];
-//	}
-//
-//	this->size += strSize;
-//	this->start = (this->start + STR_SIZE - strSize) % STR_SIZE;
-//	return *this;
-//}
-//
-//StringPiece& StringPiece::operator>>(int num) {
-//	//Use already existing operator
-//	return operator>>(convertIntToStr(num));
-//}
+StringPiece& operator>>(istream& is, StringPiece& other) {
+	char buff[1024];
+	is >> buff;
+
+	//Reset other because we doenst want >> to append but to clear
+	other.size = 0;
+	return buff >> other;
+}
 
 void StringPiece::checkIfIndexIsValid(size_t index) const {
 	if (index + 1 > this->size || index < 0) {
