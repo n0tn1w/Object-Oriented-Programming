@@ -1,9 +1,9 @@
-** Problem **
+**Problem**
 
 Въвежда се цяло число N, след което се въвеждат N триъгълника от терминала. Подредеждане по лице и печатане.
 
 
-*** Hints ***
+***Hints***
 Selection Sort
 2 separate arrays for triangles and area
 Heron's formula
