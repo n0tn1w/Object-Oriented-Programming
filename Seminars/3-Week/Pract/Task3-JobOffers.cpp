@@ -112,7 +112,7 @@ bool existOffer(const char* filePath, const char* name) {
 
     bool exist = false;
     for(size_t i = 0; i < oH->len; i++) {
-        if(strcmp(oH->offers[i].name, name)) {
+        if(!strcmp(oH->offers[i].name, name)) {
             exist = true;
             break;
         }
@@ -197,11 +197,7 @@ int main() {
             {
                 char buff[Const::OFFER_NAME_SIZE];
                 cin >> buff;
-                OfferHolder* oH = ExtractDataFromFile(Const::FILE_NAME);
                 cout << existOffer(Const::FILE_NAME, buff) << endl;
-                
-                delete[] oH->offers;
-                delete oH; 
                 break;
             }
             case 'f':
