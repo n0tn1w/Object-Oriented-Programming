@@ -17,7 +17,7 @@ Event::Event(const Date& date, const Time& start, const Time& end, const char* n
     //_start = start;
     //_end = end;
 
-    setName(name);\
+    setName(name);
     validateTimeAndSwapIfNeeded();
 }
 
