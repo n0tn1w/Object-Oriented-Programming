@@ -2,6 +2,7 @@
 Комплексни числа. Събиране(и скалар), изваждаен, умножение(и скалар), деление, оператори за вход и изход
 <br>
 ***Hint:*** Easy task. Create operator += member function that returns a ref to the original object. Then create operator + as outside funciton. Ostream << and istream >> should be friends for good OOP practice. 
+<br>
 **2. Problem** <br>
 Реализирайте клас Nvector, който ще се използва за работа с математически вектор. Предефинирайте оператори със следната функционалност:
 Събиране на вектори.
