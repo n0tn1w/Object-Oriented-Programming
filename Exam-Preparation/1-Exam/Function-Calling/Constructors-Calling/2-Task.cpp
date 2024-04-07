@@ -84,4 +84,5 @@ X f(X x) {
 
 int main() {
     X x = f(X());
+	cout << "End";
 }                  
