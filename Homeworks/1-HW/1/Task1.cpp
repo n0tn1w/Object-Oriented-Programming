@@ -583,7 +583,6 @@ int main() {
             case 'a':
             {
                 size_t colCount;
-                cout << "Enter elements to be added count: " << endl;
                 cout << '>';
                 cin >> colCount;
 
