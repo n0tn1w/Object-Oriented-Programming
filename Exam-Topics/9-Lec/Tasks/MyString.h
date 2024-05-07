@@ -3,6 +3,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+class StringView;
 
 class MyString {
 
@@ -39,8 +40,10 @@ public:
     friend std::istream& operator>>(std::istream&, MyString& oth);
 
     MyString& operator+=(const MyString&);
-    
+
     friend MyString operator+(const MyString&, const MyString &);
+
+    StringView substr(unsigned, int) const;
 private:
 
     void copyFrom(const MyString&);
@@ -56,3 +59,5 @@ private:
     unsigned _capacity = 0, _size = 0;
 
 };
+
+#include "StringView.h" 

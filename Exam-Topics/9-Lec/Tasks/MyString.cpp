@@ -207,3 +207,7 @@ MyString operator+(const MyString& l, const MyString & r) {
 
     return str;
 }
+
+StringView MyString::substr(unsigned pos, int count) const {
+    return StringView(_data + pos, count);
+}
