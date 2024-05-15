@@ -23,10 +23,9 @@ class Shape {
 
 public:
 
-    virtual double getParam() const = 0;
+    virtual double getParam() const = 0; // No need to be pure coz point to point and add 
     virtual double getArea() const = 0;
     virtual bool isPointInside(const Point&) const = 0;
-
     virtual ~Shape();
 
 protected:
