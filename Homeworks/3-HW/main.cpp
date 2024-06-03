@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include "Factory.h"
+#include "Commands.h"
 using std::cin;
 using std::cout;
 using std::endl;
@@ -44,79 +46,26 @@ static void GenerateTestData() {
 }
 
 int main() {
-
     GenerateTestData();
     PF* func = FunctionFactory::createFunction(TestData::FUNC_FILE_NAME);
 
     //CLI
     while(true) {
-        cout << "Enter work regime" << endl;
-        cout << "1 - [a, b] or 2 - entering one digit at a time" << endl;
+        std::cout << "Enter work regime" << std::endl;
+        std::cout << "1 - [a, b], 2 - entering one digit at a time" << std::endl;
         int regime = 0;
-        cin >> regime;
+        std::cin >> regime;
 
-        if(regime == 1) {
-            int a, b;
-            cout << "Enter a: " << endl;
-            cin >> a;
-            cout << "Enter b: " << endl;
-            cin >> b;
+        Command* command = CommandFactory::createCommand(regime);
 
-            if(a > b) {
-                cout << "a should be >= in relation to b" << endl;
-                continue;
-            }
-
-            for(int i = a; i <= b; i++) {
-                Pair<int, bool> res = func->operator()(i);  
-                cout << i << ": " <<"defined: " << res.second();
-                if(res.second()) {
-                    cout << " value: " << res.first();
-                }
-                cout << endl;
-            }
-            ;
-        } else if(regime == 2) {
-            
-            int next = 0;
-            cout << "Enter 1 for next number: ";
-            cin >> next;
-            bool noDefinedNumber = true;
-
-            for(long i = INT32_MIN; i < INT32_MAX; i++) {
-                Pair<int, bool> res = func->operator()(i);  
-
-                if(res.second()) {
-                    noDefinedNumber = false;
-                    cout << i << ": " << res.second();
-                    cout << " value: " << res.first();
-                    cout << endl;
-
-                    cout << "Enter 1 for next number: ";
-                    cin >> next;
-                }
-            }
-
-            if(noDefinedNumber) {
-                cout << "No defined numbers!";
-            }
-
+        if (command) {
+            command->execute(func);
+            delete command;
         } else {
-            cout << "This is not a regime..." << endl;
-            continue;
+            std::cout << "Invalid regime!" << std::endl;
         }
     }
 
     delete func;
+    return 0;
 }
-
-
-// Notes:
-
-//PFContainer::PFContainer(const PF* const* funcs, size_t size) { fix
-
-//Pair<int, bool> resultPair(resultsFromFunctions[0], true); fix
-//Pair<int, bool> resultPair(resultsFromFunctions[_size - 1], true); fix
-
-//Pair<int, bool> res = func->operator()(i);  could throw
-

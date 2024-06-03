@@ -11,7 +11,6 @@ namespace FunctionFactoryConsts {
     constexpr unsigned BUFFER_SIZE = 1024;
 };
 
-//Interface
 class FunctionFactory {
 
 public:

@@ -9,6 +9,7 @@
                 "-g",
                 "Pair.hpp",
                 "PF.cpp",
+                "Commands.cpp",
                 "Functions.cpp",
                 "PFContainer.cpp",
                 "MinOfPF.cpp",
