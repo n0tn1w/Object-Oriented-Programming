@@ -9,24 +9,34 @@ DefinedInNumbersF::DefinedInNumbersF(Pair<int, int>* data, size_t size) {
     }
 }
 
-int DefinedInNumbersF::evaluate(int val) const {
+// int DefinedInNumbersF::evaluate(int val) const {
+//     for(size_t i = 0; i < _size; i++) {
+//         if(_data[i].first() == val) {
+//             return _data[i].second();
+//         }
+//     }
+
+//     return 0;
+// }
+
+// bool DefinedInNumbersF::isDefined(int val) const {
+//     for(size_t i = 0; i < _size; i++) {
+//         if(_data[i].first() == val) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+Pair<int, bool> DefinedInNumbersF::operator()(int val) const {
     for(size_t i = 0; i < _size; i++) {
         if(_data[i].first() == val) {
-            return _data[i].second();
+            return {_data[i].second(), true};
         }
     }
-
-    return 0;
+    return {0, false};
 }
 
-bool DefinedInNumbersF::isDefined(int val) const {
-    for(size_t i = 0; i < _size; i++) {
-        if(_data[i].first() == val) {
-            return true;
-        }
-    }
-    return false;
-}
 
 // Methods for NotDefinedInNumbersF
 NotDefinedInNumbersF::NotDefinedInNumbersF(int* data, size_t size) {
@@ -34,25 +44,35 @@ NotDefinedInNumbersF::NotDefinedInNumbersF(int* data, size_t size) {
     std::memcpy(_data, data, size * sizeof(int));
 }
 
-int NotDefinedInNumbersF::evaluate(int val) const {
+// int NotDefinedInNumbersF::evaluate(int val) const {
+//     for(size_t i = 0; i < _size; i++) {
+//         if(_data[i] == val) {
+//             return 0;
+//         }
+//     }
+
+//     return val;
+// }
+
+// bool NotDefinedInNumbersF::isDefined(int val) const {
+//     for(size_t i = 0; i < _size; i++) {
+//         if(_data[i] == val) {
+//             return false;
+//         }
+//     }
+
+//     return true;
+// }
+
+Pair<int, bool> NotDefinedInNumbersF::operator()(int val) const {
     for(size_t i = 0; i < _size; i++) {
         if(_data[i] == val) {
-            return 0;
+            return {0, false};
         }
     }
-
-    return val;
+    return {val, true};
 }
 
-bool NotDefinedInNumbersF::isDefined(int val) const {
-    for(size_t i = 0; i < _size; i++) {
-        if(_data[i] == val) {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 // Methods for ReturnOneAndZeroF
 ReturnOneAndZeroF::ReturnOneAndZeroF(int* data, size_t size) {
@@ -60,16 +80,25 @@ ReturnOneAndZeroF::ReturnOneAndZeroF(int* data, size_t size) {
     std::memcpy(_data, data, size * sizeof(int));
 }
 
-int ReturnOneAndZeroF::evaluate(int val) const {
+// int ReturnOneAndZeroF::evaluate(int val) const {
+//     for(size_t i = 0; i < _size; i++) {
+//         if(_data[i] == val) {
+//             return 1;
+//         }
+//     }
+
+//     return 0;
+// }
+
+// bool ReturnOneAndZeroF::isDefined(int val) const {
+//     return true;
+// }
+
+Pair<int, bool> ReturnOneAndZeroF::operator()(int val) const {
     for(size_t i = 0; i < _size; i++) {
         if(_data[i] == val) {
-            return 1;
+            return {1, true};
         }
     }
-
-    return 0;
-}
-
-bool ReturnOneAndZeroF::isDefined(int val) const {
-    return true;
+    return {0, true};
 }

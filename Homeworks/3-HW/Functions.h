@@ -13,8 +13,7 @@ class BaseFunction {
 
 public:
 
-    virtual int evaluate(int) const = 0;
-    virtual bool isDefined(int) const = 0;
+    virtual Pair<int, bool> operator()(int) const = 0; 
 
     virtual ~BaseFunction() = default;
 
@@ -26,8 +25,8 @@ public:
 
     DefinedInNumbersF(Pair<int, int>*, size_t);
 
-    int evaluate(int) const override;
-    bool isDefined(int) const override;
+    Pair<int, bool> operator()(int) const override; 
+
 
 private: 
 
@@ -42,8 +41,7 @@ public:
 
     NotDefinedInNumbersF(int*, size_t);
 
-    int evaluate(int) const override;
-    bool isDefined(int) const override;
+    Pair<int, bool> operator()(int) const override; 
 
 private: 
 
@@ -58,8 +56,7 @@ public:
 
     ReturnOneAndZeroF(int*, size_t);
 
-    int evaluate(int) const override;
-    bool isDefined(int) const override;
+    Pair<int, bool> operator()(int) const override; 
 
 private: 
 

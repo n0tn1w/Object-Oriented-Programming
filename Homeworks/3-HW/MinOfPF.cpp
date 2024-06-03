@@ -3,33 +3,27 @@
 MinOfPF::MinOfPF(const PF* const* funcs, size_t size) : PFContainer(funcs, size) {}
 MinOfPF::MinOfPF(PF**&& funcs, size_t size) : PFContainer(std::move(funcs), size) {}
 
-int MinOfPF::evaluate(int val) const {
+Pair<int, bool> MinOfPF::operator()(int val) const {
     // if(isEmpty()) {
     //     throw std::out_of_range("No functions to be evaluated!");
     // }
     
     int currentMin = INT_MAX;
     for(size_t i = 0; i < _size; i++) {
-        int evaluateFunction = _data[i]->evaluate(val);
 
-        if(currentMin > evaluateFunction) {
-            currentMin = evaluateFunction;
+         Pair<int, bool>  res = _data[i]->operator()(val);
+
+         if(!res.second()) 
+             return {0, false};
+
+        if(currentMin > res.first()) {
+            currentMin = res.first();
         }
     }
-    return currentMin;
+
+    return {currentMin, true};
 }
 
-bool MinOfPF::isDefined(int val) const {
-    for(size_t i = 0; i < _size; i++) {
-
-        bool res = _data[i]->isDefined(val);
-
-        if(!res) 
-            return false;
-    }
-
-    return true;
-}
 
 PF* MinOfPF::clone() const {
     return new MinOfPF(*this);

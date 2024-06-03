@@ -11,8 +11,10 @@ public:
     virtual PF* clone() const = 0;
     virtual ~PF() = default;
 
-    Pair<int, bool> operator()(int) const;
-    virtual int evaluate(int) const = 0;
-    virtual bool isDefined(int) const = 0;
+    virtual Pair<int, bool> operator()(int) const = 0;
+
+    // This two are implemented for requirements
+    int evaluate(int) const;
+    bool isDefined(int) const;
 
 };

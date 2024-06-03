@@ -7,7 +7,6 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "Helper.cpp",
                 "Pair.hpp",
                 "PF.cpp",
                 "Functions.cpp",
