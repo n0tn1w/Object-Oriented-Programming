@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "compare": "cpp",
+        "limits": "cpp",
+        "type_traits": "cpp"
+    }
+}
