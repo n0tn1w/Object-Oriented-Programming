@@ -1,5 +1,4 @@
-**Тема 15**
+**Тема 14**
 
-Type casting. SOLID principles. Design patterns - типове и примери (singleton, factory, prototype, composite,
-flyweight, iterator, command, visitor).
-Пример за използване на singleton + factory.
+Дървовидна структура от обекти от полиморфна йерархия.
+Пример с логически изрази.

@@ -1,4 +1,5 @@
-**Тема 14**
+**Тема 15**
 
-Дървовидна структура от обекти от полиморфна йерархия.
-Пример с логически изрази.
+Type casting. SOLID principles. Design patterns - типове и примери (singleton, factory, prototype, composite,
+flyweight, iterator, command, visitor).
+Пример за използване на singleton + factory.
