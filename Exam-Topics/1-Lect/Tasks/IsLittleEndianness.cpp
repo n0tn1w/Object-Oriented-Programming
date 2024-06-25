@@ -11,8 +11,8 @@ union  Data
 bool isLittleEndianness() {
     Data uni;
     uni.i = 1;
-    uni.s = 3;
-    return uni.i == uni.s;
+    //uni.s = 3;
+    return uni.s == 1;
 }
 
 int main() {
