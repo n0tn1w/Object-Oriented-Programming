@@ -6,6 +6,6 @@ Expr* Conjuction::clone() const {
     return new Conjuction(_left, _right);
 }
 
-bool Conjuction::eval(BoolInterpretation& bi) const {
+bool Conjuction::eval(const BoolInterpretation& bi) const {
     return _left->eval(bi) && _right->eval(bi);
 }

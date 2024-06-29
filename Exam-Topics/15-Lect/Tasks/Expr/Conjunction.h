@@ -9,5 +9,5 @@ public:
     Conjuction(Expr*, Expr*);
 
     Expr* clone() const override;
-    bool eval(BoolInterpretation&) const override;
+    bool eval(const BoolInterpretation&) const override;
 };

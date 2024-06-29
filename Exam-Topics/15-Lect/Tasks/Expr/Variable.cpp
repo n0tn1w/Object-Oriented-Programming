@@ -9,7 +9,7 @@ Expr* Variable::clone() const {
     return new Variable(_ch);
 }
 
-bool Variable::eval(BoolInterpretation& bi) const {
+bool Variable::eval(const BoolInterpretation& bi) const {
     return bi.getCharAt(_ch);
 }
 

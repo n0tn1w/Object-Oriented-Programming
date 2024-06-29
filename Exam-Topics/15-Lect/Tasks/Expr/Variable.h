@@ -8,7 +8,7 @@ public:
     Variable(char ch);
 
     Expr* clone() const override;
-    bool eval(BoolInterpretation&) const override;
+    bool eval(const BoolInterpretation&) const override;
     void getVariableInExpr(BoolInterpretation&) const override;
 
 private:

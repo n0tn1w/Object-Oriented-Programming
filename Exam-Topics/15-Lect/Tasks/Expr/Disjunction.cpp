@@ -6,6 +6,6 @@ Expr* Disjunction::clone() const {
     return new Disjunction(_left, _right);
 }
 
-bool Disjunction::eval(BoolInterpretation& bi) const {
+bool Disjunction::eval(const BoolInterpretation& bi) const {
     return _left->eval(bi) || _right->eval(bi);
 }

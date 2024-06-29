@@ -6,7 +6,7 @@ Expr* Negotiate::clone() const {
     return new Negotiate(_expr);
 }
 
-bool Negotiate::eval(BoolInterpretation& bi) const {
+bool Negotiate::eval(const BoolInterpretation& bi) const {
     return !(_expr->eval(bi));
 }
 

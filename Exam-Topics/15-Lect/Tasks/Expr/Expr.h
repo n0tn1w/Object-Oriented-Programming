@@ -12,7 +12,7 @@ public:
     Expr& operator=(const Expr&) = delete;
 
     virtual Expr* clone() const = 0;
-    virtual bool eval(BoolInterpretation&) const = 0;
+    virtual bool eval(const BoolInterpretation&) const = 0;
     virtual void getVariableInExpr(BoolInterpretation&) const = 0;
 
     virtual ~Expr() = default;
