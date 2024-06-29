@@ -10,8 +10,6 @@ public:
 
     PF* clone() const override;
 
-protected:
-
     // Only operator() so function pointer can be given to it
     Pair<int, bool> operator()(int) const override; 
     
