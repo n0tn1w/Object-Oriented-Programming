@@ -1,1 +1,1 @@
-Is this the beginning or the end?
+Is this the end or the beginning?
