@@ -4,17 +4,18 @@
 using std::cout;
 using std::endl;
 
-#include "StaffMember.h"
+#include "Employee.h"
 
-struct Manager : StaffMember {
+class Manager: public Employee {
 
 public:
 
-    StaffMember* clone() const override;
+    Employee* clone() const override;
     size_t getWorkersCount() const override;
     void print() const override;
-    void addSubordinate(StaffMember* subordinate) override;
+    void addSubordinate(Employee* subordinate) override;
 
+    Manager(const std::string&, const std::string&, size_t);
 
     Manager();
     Manager(const Manager&);
@@ -24,6 +25,7 @@ public:
     ~Manager();
 
 private:
+    void print(const std::string&) const override;
 
     void copyFrom(const Manager&);
     void moveFrom(Manager&&);
@@ -32,7 +34,7 @@ private:
 
     std::string _position;
     
-    StaffMember** _emps = nullptr;
+    Employee** _emps = nullptr;
     size_t _size = 0;
     size_t _capacity = 0;
 

@@ -1,6 +1,6 @@
 #include "Manager.h"
 
-StaffMember* Manager::clone() const {
+Employee* Manager::clone() const {
     return new Manager(*this);
 }
 
@@ -9,13 +9,22 @@ size_t Manager::getWorkersCount() const {
 }
 
 void Manager::print() const {
-    cout << " - " << _position << endl;
+    cout << " - " << _position  << " : "<< _name << endl;
     for(size_t i = 0; i < _size; i++) {
-        _emps[i]->print();
+        _emps[i]->print("\t");
     }
 }
 
-void Manager::addSubordinate(StaffMember* subordinate) {
+void Manager::print(const std::string& str) const {
+    cout << str << " - " << _position  << " : "<< _name << endl;
+    for(size_t i = 0; i < _size; i++) {
+        std::string std = str + '\t';
+        _emps[i]->print(std);
+    }
+}
+
+
+void Manager::addSubordinate(Employee* subordinate) {
     if(_size  == _capacity)
         resize();
 
@@ -24,7 +33,7 @@ void Manager::addSubordinate(StaffMember* subordinate) {
 
 void Manager::resize() {
     _capacity *= 2;
-    StaffMember** newEmps = new StaffMember*[_capacity];
+    Employee** newEmps = new Employee*[_capacity];
 
     for(size_t i = 0; i < _size; i++) {
         newEmps[i] = _emps[i];
@@ -34,8 +43,12 @@ void Manager::resize() {
     _emps = newEmps;
 } 
 
+Manager::Manager(const std::string& position, 
+const std::string& name, size_t salary) : Employee(name, salary), _position(position)
+{ }
+
 void Manager::copyFrom(const Manager& oth) {
-    _emps = new StaffMember*[oth._capacity];
+    _emps = new Employee*[oth._capacity];
     _capacity = oth._capacity;
     _size = oth._size;
 
@@ -60,19 +73,19 @@ void Manager::free() {
     delete[] _emps;
 }
 
-Manager::Manager() : StaffMember() {
+Manager::Manager() : Employee() {
     _capacity = 4;
-    _emps = new StaffMember*[_capacity];
+    _emps = new Employee*[_capacity];
 }
-Manager::Manager(const Manager& oth) : StaffMember(oth) {
+Manager::Manager(const Manager& oth) : Employee(oth) {
     copyFrom(oth);
 }
-Manager::Manager(Manager&& oth) : StaffMember(std::move(oth)) {
+Manager::Manager(Manager&& oth) : Employee(std::move(oth)) {
     moveFrom(std::move(oth));
 }
 Manager& Manager::operator=(const Manager& oth) {
     if(this != &oth) {
-        StaffMember::operator=(oth);
+        Employee::operator=(oth);
         free();
         copyFrom(oth);
     }
@@ -80,7 +93,7 @@ Manager& Manager::operator=(const Manager& oth) {
 }
 Manager& Manager::operator=(Manager&& oth) {
     if(this != &oth) {
-        StaffMember::operator=(std::move(oth));
+        Employee::operator=(std::move(oth));
         free();
         moveFrom(std::move(oth));
     }
